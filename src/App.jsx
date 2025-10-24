@@ -4,26 +4,61 @@ import './App.css';
 function App() {
   const [activeTab, setActiveTab] = useState('contact');
   const [formData, setFormData] = useState({
+    // Shared Fields
     fullName: '',
     email: '',
     phone: '',
-    subject: '',
-    message: '',
-    rating: '5',
+    subject: '', // Used in Contact and Suggestion
+
+    // Contact Fields
+    contactMessage: '', // Unique for Contact Form
+
+    // Feedback Fields
     productService: '',
-    satisfactionLevel: 'satisfied',
+    feedbackRating: '5', // Unique for Feedback 1-5
+    feedbackSatisfactionLevel: 'satisfied', // Unique for Feedback
+    feedbackMessage: '', // Unique for Feedback
+
+    // Survey Fields
+    surveySatisfactionLevel: 'satisfied', // Unique for Survey
+    surveyRating: '5', // Unique for Survey 1-10
     improvements: '',
+    surveyMessage: '', // Unique for Survey
+
+    // Complaint Fields
     complaintType: '',
     incidentDate: '',
+    complaintMessage: '', // Unique for Complaint
+    complaintExpectedOutcome: '', // Unique for Complaint
+
+    // Suggestion Fields
     suggestionCategory: '',
-    expectedOutcome: ''
+    suggestionMessage: '', // Unique for Suggestion
+    suggestionExpectedOutcome: '' // Unique for Suggestion
   });
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, min, max } = e.target;
+    let newValue = value;
+
+    // Type casting and validation for number inputs
+    if (type === 'number') {
+      const numValue = parseInt(value, 10);
+      const minVal = parseInt(min, 10) || -Infinity;
+      const maxVal = parseInt(max, 10) || Infinity;
+      
+      if (!isNaN(numValue) && numValue >= minVal && numValue <= maxVal) {
+        newValue = numValue.toString();
+      } else if (value === '') {
+        newValue = ''; 
+      } else {
+        newValue = value;
+      }
+    }
+
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: newValue
     }));
   };
 
@@ -31,20 +66,29 @@ function App() {
     e.preventDefault();
     console.log(`${activeTab} submitted:`, formData);
     alert(`${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} submitted successfully!`);
+    
+    // Clear the form data
     setFormData({
-      fullName: '',
-      email: '',
-      phone: '',
-      subject: '',
-      message: '',
-      rating: '5',
-      productService: '',
-      satisfactionLevel: 'satisfied',
-      improvements: '',
-      complaintType: '',
-      incidentDate: '',
-      suggestionCategory: '',
-      expectedOutcome: ''
+        fullName: '',
+        email: '',
+        phone: '',
+        subject: '', 
+        contactMessage: '', 
+        productService: '',
+        feedbackRating: '5',
+        feedbackSatisfactionLevel: 'satisfied',
+        feedbackMessage: '',
+        surveySatisfactionLevel: 'satisfied',
+        surveyRating: '5', 
+        improvements: '',
+        surveyMessage: '', 
+        complaintType: '',
+        incidentDate: '',
+        complaintMessage: '', 
+        complaintExpectedOutcome: '', 
+        suggestionCategory: '',
+        suggestionMessage: '',
+        suggestionExpectedOutcome: ''
     });
   };
 
@@ -58,6 +102,9 @@ function App() {
       default: return 'Contact Us';
     }
   };
+
+  // Define a style object for black text
+  const blackTextStyle = { color: '#000000' };
 
   const renderForm = () => {
     switch(activeTab) {
@@ -74,6 +121,7 @@ function App() {
                 onChange={handleInputChange}
                 placeholder="John Doe"
                 required
+                style={blackTextStyle} // Added black text style
               />
             </div>
 
@@ -87,6 +135,7 @@ function App() {
                 onChange={handleInputChange}
                 placeholder="john@example.com"
                 required
+                style={blackTextStyle} // Added black text style
               />
             </div>
 
@@ -100,6 +149,7 @@ function App() {
                 onChange={handleInputChange}
                 placeholder="+1 (555) 000-0000"
                 required
+                style={blackTextStyle} // Added black text style
               />
             </div>
 
@@ -113,19 +163,21 @@ function App() {
                 onChange={handleInputChange}
                 placeholder="How can we help?"
                 required
+                style={blackTextStyle} // Added black text style
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="message">Message</label>
+              <label htmlFor="contactMessage">Message</label>
               <textarea
-                id="message"
-                name="message"
-                value={formData.message}
+                id="contactMessage"
+                name="contactMessage" 
+                value={formData.contactMessage}
                 onChange={handleInputChange}
                 placeholder="Tell us more about your inquiry..."
                 rows="6"
                 required
+                style={blackTextStyle} // Added black text style
               ></textarea>
             </div>
           </>
@@ -137,88 +189,92 @@ function App() {
             <div className="form-group">
               <label htmlFor="fullName">Full Name</label>
               <input
-          type="text"
-          id="fullName"
-          name="fullName"
-          value={formData.fullName}
-          onChange={handleInputChange}
-          placeholder="John Doe"
-          required
+                type="text"
+                id="fullName"
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleInputChange}
+                placeholder="John Doe"
+                required
+                style={blackTextStyle} // Added black text style
               />
             </div>
 
             <div className="form-group">
               <label htmlFor="email">Email</label>
               <input
-          type="email"
-          id="email"
-          name="email"
-          value={formData.email}
-          onChange={handleInputChange}
-          placeholder="john@example.com"
-          required
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                placeholder="john@example.com"
+                required
+                style={blackTextStyle} // Added black text style
               />
             </div>
 
             <div className="form-group">
               <label htmlFor="productService">Product/Service</label>
               <input
-          type="text"
-          id="productService"
-          name="productService"
-          value={formData.productService}
-          onChange={handleInputChange}
-          placeholder="Which product or service?"
-          required
+                type="text"
+                id="productService"
+                name="productService"
+                value={formData.productService}
+                onChange={handleInputChange}
+                placeholder="Which product or service?"
+                required
+                style={blackTextStyle} // Added black text style
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="rating">Rating (1-5)</label>
+              <label htmlFor="feedbackRating">Rating (1-5)</label>
               <select
-          id="rating"
-          name="rating"
-          value={formData.rating}
-          onChange={handleInputChange}
-          required
-          style={{ color: '#000' }}
+                id="feedbackRating"
+                name="feedbackRating" 
+                value={formData.feedbackRating}
+                onChange={handleInputChange}
+                required
+                style={blackTextStyle} // Added black text style to select
               >
-          <option value="5" style={{ color: '#000' }}>5 - Excellent</option>
-          <option value="4" style={{ color: '#000' }}>4 - Good</option>
-          <option value="3" style={{ color: '#000' }}>3 - Average</option>
-          <option value="2" style={{ color: '#000' }}>2 - Poor</option>
-          <option value="1" style={{ color: '#000' }}>1 - Very Poor</option>
+                <option value="5">5 - Excellent</option>
+                <option value="4">4 - Good</option>
+                <option value="3">3 - Average</option>
+                <option value="2">2 - Poor</option>
+                <option value="1">1 - Very Poor</option>
               </select>
             </div>
 
             <div className="form-group">
-              <label htmlFor="satisfactionLevel">Overall Satisfaction</label>
+              <label htmlFor="feedbackSatisfactionLevel">Overall Satisfaction</label>
               <select
-          id="satisfactionLevel"
-          name="satisfactionLevel"
-          value={formData.satisfactionLevel}
-          onChange={handleInputChange}
-          required
-          style={{ color: '#000' }}
+                id="feedbackSatisfactionLevel"
+                name="feedbackSatisfactionLevel" 
+                value={formData.feedbackSatisfactionLevel}
+                onChange={handleInputChange}
+                required
+                style={blackTextStyle} // Added black text style to select
               >
-          <option value="very-satisfied" style={{ color: '#000' }}>Very Satisfied</option>
-          <option value="satisfied" style={{ color: '#000' }}>Satisfied</option>
-          <option value="neutral" style={{ color: '#000' }}>Neutral</option>
-          <option value="dissatisfied" style={{ color: '#000' }}>Dissatisfied</option>
-          <option value="very-dissatisfied" style={{ color: '#000' }}>Very Dissatisfied</option>
+                <option value="very-satisfied">Very Satisfied</option>
+                <option value="satisfied">Satisfied</option>
+                <option value="neutral">Neutral</option>
+                <option value="dissatisfied">Dissatisfied</option>
+                <option value="very-dissatisfied">Very Dissatisfied</option>
               </select>
             </div>
 
             <div className="form-group">
-              <label htmlFor="message">Your Feedback</label>
+              <label htmlFor="feedbackMessage">Your Feedback</label>
               <textarea
-          id="message"
-          name="message"
-          value={formData.message}
-          onChange={handleInputChange}
-          placeholder="Share your experience with us..."
-          rows="6"
-          required
+                id="feedbackMessage"
+                name="feedbackMessage" 
+                value={formData.feedbackMessage}
+                onChange={handleInputChange}
+                placeholder="Share your experience with us..."
+                rows="6"
+                required
+                style={blackTextStyle} // Added black text style
               ></textarea>
             </div>
           </>
@@ -230,89 +286,89 @@ function App() {
             <div className="form-group">
               <label htmlFor="fullName">Full Name</label>
               <input
-          type="text"
-          id="fullName"
-          name="fullName"
-          value={formData.fullName}
-          onChange={handleInputChange}
-          placeholder="John Doe"
-          required
-          style={{ color: '#000' }}
+                type="text"
+                id="fullName"
+                name="fullName" 
+                value={formData.fullName}
+                onChange={handleInputChange}
+                placeholder="John Doe"
+                required
+                style={blackTextStyle} // Added black text style
               />
             </div>
 
             <div className="form-group">
               <label htmlFor="email">Email</label>
               <input
-          type="email"
-          id="email"
-          name="email"
-          value={formData.email}
-          onChange={handleInputChange}
-          placeholder="john@example.com"
-          required
-          style={{ color: '#000' }}
+                type="email"
+                id="email"
+                name="email" 
+                value={formData.email}
+                onChange={handleInputChange}
+                placeholder="john@example.com"
+                required
+                style={blackTextStyle} // Added black text style
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="satisfactionLevel">How satisfied are you with our services?</label>
+              <label htmlFor="surveySatisfactionLevel">How satisfied are you with our services?</label>
               <select
-          id="satisfactionLevel"
-          name="satisfactionLevel"
-          value={formData.satisfactionLevel}
-          onChange={handleInputChange}
-          required
-          style={{ color: '#000' }}
+                id="surveySatisfactionLevel"
+                name="surveySatisfactionLevel" 
+                value={formData.surveySatisfactionLevel}
+                onChange={handleInputChange}
+                required
+                style={blackTextStyle} // Added black text style to select
               >
-          <option value="very-satisfied">Very Satisfied</option>
-          <option value="satisfied">Satisfied</option>
-          <option value="neutral">Neutral</option>
-          <option value="dissatisfied">Dissatisfied</option>
-          <option value="very-dissatisfied">Very Dissatisfied</option>
+                <option value="very-satisfied">Very Satisfied</option>
+                <option value="satisfied">Satisfied</option>
+                <option value="neutral">Neutral</option>
+                <option value="dissatisfied">Dissatisfied</option>
+                <option value="very-dissatisfied">Very Dissatisfied</option>
               </select>
             </div>
 
             <div className="form-group">
-              <label htmlFor="rating">Would you recommend us to others? (1-10)</label>
+              <label htmlFor="surveyRating">Would you recommend us to others? (1-10)</label>
               <input
-          type="number"
-          id="rating"
-          name="rating"
-          value={formData.rating}
-          onChange={handleInputChange}
-          min="1"
-          max="10"
-          placeholder="Rate from 1 to 10"
-          required
-          style={{ color: '#000' }}
+                type="number"
+                id="surveyRating"
+                name="surveyRating" 
+                value={formData.surveyRating}
+                onChange={handleInputChange}
+                min="1"
+                max="10"
+                placeholder="Rate from 1 to 10"
+                required
+                style={blackTextStyle} // Added black text style
               />
             </div>
 
             <div className="form-group">
               <label htmlFor="improvements">What can we improve?</label>
               <textarea
-          id="improvements"
-          name="improvements"
-          value={formData.improvements}
-          onChange={handleInputChange}
-          placeholder="Please share your suggestions for improvement..."
-          rows="5"
-          required
-          style={{ color: '#000' }}
+                id="improvements"
+                name="improvements"
+                value={formData.improvements}
+                onChange={handleInputChange}
+                placeholder="Please share your suggestions for improvement..."
+                rows="5"
+                required
+                style={blackTextStyle} // Added black text style
               ></textarea>
             </div>
 
             <div className="form-group">
-              <label htmlFor="message">Additional Comments</label>
+              <label htmlFor="surveyMessage">Additional Comments</label>
               <textarea
-          id="message"
-          name="message"
-          value={formData.message}
-          onChange={handleInputChange}
-          placeholder="Any other feedback you'd like to share..."
-          rows="4"
-          style={{ color: '#000' }}
+                id="surveyMessage"
+                name="surveyMessage" 
+                value={formData.surveyMessage}
+                onChange={handleInputChange}
+                placeholder="Any other feedback you'd like to share..."
+                rows="4"
+                style={blackTextStyle} // Added black text style
               ></textarea>
             </div>
           </>
@@ -324,103 +380,103 @@ function App() {
             <div className="form-group">
               <label htmlFor="fullName">Full Name</label>
               <input
-          type="text"
-          id="fullName"
-          name="fullName"
-          value={formData.fullName}
-          onChange={handleInputChange}
-          placeholder="John Doe"
-          required
-          style={{ color: '#000' }}
+                type="text"
+                id="fullName"
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleInputChange}
+                placeholder="John Doe"
+                required
+                style={blackTextStyle} // Added black text style
               />
             </div>
 
             <div className="form-group">
               <label htmlFor="email">Email</label>
               <input
-          type="email"
-          id="email"
-          name="email"
-          value={formData.email}
-          onChange={handleInputChange}
-          placeholder="john@example.com"
-          required
-          style={{ color: '#000' }}
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                placeholder="john@example.com"
+                required
+                style={blackTextStyle} // Added black text style
               />
             </div>
 
             <div className="form-group">
               <label htmlFor="phone">Phone</label>
               <input
-          type="tel"
-          id="phone"
-          name="phone"
-          value={formData.phone}
-          onChange={handleInputChange}
-          placeholder="+1 (555) 000-0000"
-          required
-          style={{ color: '#000' }}
+                type="tel"
+                id="phone"
+                name="phone"
+                value={formData.phone}
+                onChange={handleInputChange}
+                placeholder="+1 (555) 000-0000"
+                required
+                style={blackTextStyle} // Added black text style
               />
             </div>
 
             <div className="form-group">
               <label htmlFor="complaintType">Complaint Type</label>
               <select
-          id="complaintType"
-          name="complaintType"
-          value={formData.complaintType}
-          onChange={handleInputChange}
-          required
-          style={{ color: '#000' }}
+                id="complaintType"
+                name="complaintType"
+                value={formData.complaintType}
+                onChange={handleInputChange}
+                required
+                style={blackTextStyle} // Added black text style to select
               >
-          <option value="">Select complaint type</option>
-          <option value="product-quality">Product Quality</option>
-          <option value="service-issue">Service Issue</option>
-          <option value="billing">Billing/Payment</option>
-          <option value="delivery">Delivery</option>
-          <option value="customer-support">Customer Support</option>
-          <option value="other">Other</option>
+                <option value="">Select complaint type</option>
+                <option value="product-quality">Product Quality</option>
+                <option value="service-issue">Service Issue</option>
+                <option value="billing">Billing/Payment</option>
+                <option value="delivery">Delivery</option>
+                <option value="customer-support">Customer Support</option>
+                <option value="other">Other</option>
               </select>
             </div>
 
             <div className="form-group">
               <label htmlFor="incidentDate">Date of Incident</label>
               <input
-          type="date"
-          id="incidentDate"
-          name="incidentDate"
-          value={formData.incidentDate}
-          onChange={handleInputChange}
-          required
-          style={{ color: '#000' }}
+                type="date"
+                id="incidentDate"
+                name="incidentDate"
+                value={formData.incidentDate}
+                onChange={handleInputChange}
+                required
+                style={blackTextStyle} // Added black text style
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="message">Complaint Details</label>
+              <label htmlFor="complaintMessage">Complaint Details</label>
               <textarea
-          id="message"
-          name="message"
-          value={formData.message}
-          onChange={handleInputChange}
-          placeholder="Please describe your complaint in detail..."
-          rows="6"
-          required
-          style={{ color: '#000' }}
+                id="complaintMessage"
+                name="complaintMessage" 
+                value={formData.complaintMessage}
+                onChange={handleInputChange}
+                placeholder="Please describe your complaint in detail..."
+                rows="6"
+                required
+                style={blackTextStyle} // Added black text style
               ></textarea>
             </div>
 
             <div className="form-group">
-              <label htmlFor="expectedOutcome">Expected Resolution</label>
+              <label htmlFor="complaintExpectedOutcome">Expected Resolution</label>
               <textarea
-          id="expectedOutcome"
-          name="expectedOutcome"
-          value={formData.expectedOutcome}
-          onChange={handleInputChange}
-          placeholder="What outcome would you like?"
-          rows="3"
-          required
-          style={{ color: '#000' }}
+                id="complaintExpectedOutcome"
+                name="complaintExpectedOutcome" 
+                value={formData.complaintExpectedOutcome}
+                onChange={handleInputChange}
+                placeholder="What outcome would you like?"
+                rows="3"
+                required
+                style={blackTextStyle} // Added black text style
               ></textarea>
             </div>
           </>
@@ -432,90 +488,90 @@ function App() {
             <div className="form-group">
               <label htmlFor="fullName">Full Name</label>
               <input
-          type="text"
-          id="fullName"
-          name="fullName"
-          value={formData.fullName}
-          onChange={handleInputChange}
-          placeholder="John Doe"
-          required
-          style={{ color: '#000' }}
+                type="text"
+                id="fullName"
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleInputChange}
+                placeholder="John Doe"
+                required
+                style={blackTextStyle} // Added black text style
               />
             </div>
 
             <div className="form-group">
               <label htmlFor="email">Email</label>
               <input
-          type="email"
-          id="email"
-          name="email"
-          value={formData.email}
-          onChange={handleInputChange}
-          placeholder="john@example.com"
-          required
-          style={{ color: '#000' }}
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                placeholder="john@example.com"
+                required
+                style={blackTextStyle} // Added black text style
               />
             </div>
 
             <div className="form-group">
               <label htmlFor="suggestionCategory">Suggestion Category</label>
               <select
-          id="suggestionCategory"
-          name="suggestionCategory"
-          value={formData.suggestionCategory}
-          onChange={handleInputChange}
-          required
-          style={{ color: '#000' }}
+                id="suggestionCategory"
+                name="suggestionCategory"
+                value={formData.suggestionCategory}
+                onChange={handleInputChange}
+                required
+                style={blackTextStyle} // Added black text style to select
               >
-          <option value="">Select category</option>
-          <option value="new-feature">New Feature</option>
-          <option value="improvement">Improvement</option>
-          <option value="user-experience">User Experience</option>
-          <option value="product">Product</option>
-          <option value="service">Service</option>
-          <option value="other">Other</option>
+                <option value="">Select category</option>
+                <option value="new-feature">New Feature</option>
+                <option value="improvement">Improvement</option>
+                <option value="user-experience">User Experience</option>
+                <option value="product">Product</option>
+                <option value="service">Service</option>
+                <option value="other">Other</option>
               </select>
             </div>
 
             <div className="form-group">
               <label htmlFor="subject">Suggestion Title</label>
               <input
-          type="text"
-          id="subject"
-          name="subject"
-          value={formData.subject}
-          onChange={handleInputChange}
-          placeholder="Brief title for your suggestion"
-          required
-          style={{ color: '#000' }}
+                type="text"
+                id="subject"
+                name="subject"
+                value={formData.subject}
+                onChange={handleInputChange}
+                placeholder="Brief title for your suggestion"
+                required
+                style={blackTextStyle} // Added black text style
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="message">Detailed Suggestion</label>
+              <label htmlFor="suggestionMessage">Detailed Suggestion</label>
               <textarea
-          id="message"
-          name="message"
-          value={formData.message}
-          onChange={handleInputChange}
-          placeholder="Please describe your suggestion in detail..."
-          rows="6"
-          required
-          style={{ color: '#000' }}
+                id="suggestionMessage"
+                name="suggestionMessage" 
+                value={formData.suggestionMessage}
+                onChange={handleInputChange}
+                placeholder="Please describe your suggestion in detail..."
+                rows="6"
+                required
+                style={blackTextStyle} // Added black text style
               ></textarea>
             </div>
 
             <div className="form-group">
-              <label htmlFor="expectedOutcome">Expected Benefits</label>
+              <label htmlFor="suggestionExpectedOutcome">Expected Benefits</label>
               <textarea
-          id="expectedOutcome"
-          name="expectedOutcome"
-          value={formData.expectedOutcome}
-          onChange={handleInputChange}
-          placeholder="How would this suggestion benefit users?"
-          rows="3"
-          required
-          style={{ color: '#000' }}
+                id="suggestionExpectedOutcome"
+                name="suggestionExpectedOutcome" 
+                value={formData.suggestionExpectedOutcome}
+                onChange={handleInputChange}
+                placeholder="How would this suggestion benefit users?"
+                rows="3"
+                required
+                style={blackTextStyle} // Added black text style
               ></textarea>
             </div>
           </>
